@@ -17,3 +17,5 @@
 - /login : 로그인
 - /main/event/[id] : 상세 예약
 - /main/event/write/[id] : 생성 및 예약
+
+## 데이터 구조
