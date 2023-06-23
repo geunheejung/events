@@ -32,7 +32,9 @@ const Header = () => {
           <AiFillBulb style={{ width: 24, height: 24 }} />
         </div>
         <div>
-          <AiOutlineSearch style={{ width: 18, height: 18 }} />
+          <Link href="/search">
+            <AiOutlineSearch style={{ width: 18, height: 18 }} />
+          </Link>
         </div>
         <div className="write-btn">
           <Link href="/write">새 글 작성</Link>

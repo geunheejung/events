@@ -6,9 +6,21 @@ export const GET = async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
+    const keyword = searchParams.get("keyword");
 
     const db = client.db("reservation");
     const collection = await db.collection("events");
+
+    if (keyword) {
+      const data = await collection
+        .find({ title: { $in: [keyword] } })
+        .toArray();
+
+      return NextResponse.json(
+        { message: "success", data, ok: true },
+        { status: 200 }
+      );
+    }
 
     const data = id
       ? ((await collection.findOne({ _id: new ObjectId(id) })) as IEvent)
@@ -18,13 +30,16 @@ export const GET = async (request: NextRequest) => {
       { message: "success", data, ok: true },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: any) {
+    console.log("error =>", error);
     return NextResponse.json(
-      { message: "fail", data: {}, ok: false },
+      { message: error.message, data: {}, ok: false },
       { status: 400 }
     );
   }
 };
+
+// GET으로 하되, keyword를 보내자.
 
 export const POST = async (request: NextRequest) => {
   try {

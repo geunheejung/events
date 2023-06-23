@@ -17,6 +17,8 @@ export const getList = async () => {
 
   const data = (await res.json()) as IEventResponse;
 
+  console.log("data ->", data);
+
   return data;
 };
 
@@ -34,6 +36,21 @@ export const getItem = async (payload: { id: string }) => {
   const { data } = await res.json();
 
   return data as IEvent;
+};
+export const getItemByKeyword = async (payload: { keyword: string }) => {
+  const res = await fetch(`${url}?keyword=${payload.keyword}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch search item");
+  }
+
+  const { data } = await res.json();
+
+  return data as IEvent[];
 };
 
 export const setItem = async (payload: IEventPayload) => {
