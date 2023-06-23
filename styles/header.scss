@@ -1,0 +1,30 @@
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 1376px;
+  height: 64px;
+  margin: 0 auto;
+
+  .btn-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .write-btn {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    padding: 0 20px;
+    border: 1px solid #222;
+    border-radius: 20px;
+    transition: all 0.125s ease-in 0s;
+    cursor: pointer;
+
+    &:hover {
+      background: #222;
+      color: #fff;
+    }
+  }
+}

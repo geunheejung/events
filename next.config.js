@@ -1,3 +1,5 @@
+const path = require("path");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // 실험적 기능을 사용. 모든 실험적 기능은 향후 브레이킹 체인지가 적용될 수 있음.
@@ -9,6 +11,9 @@ const nextConfig = {
   webpack(config) {
     config.experiments = { ...config.experiments, topLevelAwait: true };
     return config;
+  },
+  sassOptions: {
+    includePaths: [path.join(__dirname, "styles")],
   },
 };
 
