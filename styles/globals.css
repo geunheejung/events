@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background: #f8f9fa;
+}
+main {
+  width: 1376px;
+  margin: 0 auto;
+}
