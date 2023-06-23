@@ -39,7 +39,7 @@ const WriteForm = (props: IProps) => {
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      onSubmit({ title: _title, content: _content });
+      onSubmit({ title: _title, content: _content, _id: "" });
     },
     [_title, _content]
   );

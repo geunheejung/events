@@ -1,3 +1,4 @@
+import "@/styles/globals.css";
 import { getList } from "@/services/api";
 import { headers } from "next/dist/client/components/headers";
 import Link from "next/link";

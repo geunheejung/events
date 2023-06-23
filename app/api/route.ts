@@ -15,12 +15,12 @@ export const GET = async (request: NextRequest) => {
       : ((await collection.find({}).toArray()) as IEvent[]);
 
     return NextResponse.json(
-      { message: "success", data, status: 200 },
+      { message: "success", data, ok: true },
       { status: 200 }
     );
   } catch (error) {
     return NextResponse.json(
-      { message: "fail", data: {}, status: 400 },
+      { message: "fail", data: {}, ok: false },
       { status: 400 }
     );
   }
@@ -39,10 +39,18 @@ export const POST = async (request: NextRequest) => {
       reg_date: new Date(),
     });
 
-    return NextResponse.json({ message: "Success Write", data: {}, ok: true });
-  } catch (error) {
+    const insertedItem = await db
+      .collection("events")
+      .findOne({ _id: res.insertedId });
+
+    return NextResponse.json({
+      message: "Success Write",
+      data: insertedItem,
+      ok: true,
+    });
+  } catch (error: any) {
     return NextResponse.json(
-      { message: "Fail Write", data: {}, ok: false },
+      { message: "Fail Write", data: { message: error.message }, ok: false },
       { status: 400 }
     );
   }
@@ -67,14 +75,19 @@ export const PUT = async (request: NextRequest) => {
       throw new Error("Required Id");
     }
 
-    console.log(payload);
-
     const res = await db
       .collection("events")
       .updateOne({ _id: new ObjectId(id) }, { $set: data });
-    console.log(res);
 
-    return NextResponse.json({ message: "Success Update", data: {}, ok: true });
+    const updatedItem = await db
+      .collection("events")
+      .findOne({ _id: new ObjectId(id) });
+
+    return NextResponse.json({
+      message: "Success Update",
+      data: updatedItem,
+      ok: true,
+    });
   } catch (error) {
     return NextResponse.json(
       { message: "Fail Write", data: {}, ok: false },

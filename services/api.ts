@@ -1,3 +1,5 @@
+import { revalidatePath } from "next/cache";
+
 const url = `http://localhost:3000/api`;
 
 export const getList = async () => {
@@ -6,6 +8,8 @@ export const getList = async () => {
       "Content-Type": "application/json",
     },
   });
+
+  revalidatePath("/");
 
   if (!res.ok) {
     throw new Error("Failed to fetch data list");
@@ -42,6 +46,8 @@ export const setItem = async (payload: IEventPayload) => {
   if (!res.ok) {
     throw new Error("Failed to fetch set data");
   }
+
+  return res;
 };
 
 export const updateItem = async (payload: IEventPayload) => {
@@ -54,4 +60,6 @@ export const updateItem = async (payload: IEventPayload) => {
   if (!res.ok) {
     throw new Error("Failed to fetch update data");
   }
+
+  return res;
 };
