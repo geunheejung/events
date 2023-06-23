@@ -17,4 +17,6 @@ declare global {
   }
 
   interface IEventResponse extends IResponse<IEvent[]> {}
+
+  type IEventPayload = Pick<IEvent, "title" | "content" | "_id">;
 }

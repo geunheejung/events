@@ -6,9 +6,10 @@ export const getList = async () => {
       "Content-Type": "application/json",
     },
   });
-  const { ok } = res;
 
-  if (!ok) throw new Error("Failed getList");
+  if (!res.ok) {
+    throw new Error("Failed to fetch data list");
+  }
 
   const data = (await res.json()) as IEventResponse;
 
@@ -22,17 +23,35 @@ export const getItem = async (payload: { id: string }) => {
     },
   });
 
-  if (!res.ok) throw new Error("Failed getItem");
+  if (!res.ok) {
+    throw new Error("Failed to fetch data item");
+  }
 
-  const { data } = (await res.json()) as IEventResponse;
+  const { data } = await res.json();
 
-  return data[0];
+  return data as IEvent;
 };
 
-export const setItem = async (payload: Pick<IEvent, "title" | "content">) => {
+export const setItem = async (payload: IEventPayload) => {
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch set data");
+  }
+};
+
+export const updateItem = async (payload: IEventPayload) => {
+  const res = await fetch(url, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch update data");
+  }
 };
