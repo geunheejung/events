@@ -3,9 +3,25 @@
 @tailwind utilities;
 
 body {
+  position: relative;
   background: #f8f9fa;
 }
 main {
   width: 1376px;
   margin: 0 auto;
+}
+
+.spinner-container {
+  position: relative;
+  width: 100vw;
+  height: 100%;
+}
+
+.spinner-container > svg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
 }

@@ -1,28 +1,13 @@
-"use client";
-
-import { getItem } from "@/services/api";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { getItem } from "@/services/api";
 
-export default () => {
-  const [eventPost, setEventPost] = useState<IEvent>();
-  const params = useParams();
+export default async (props: { params: { id: string } }) => {
+  const {
+    params: { id },
+  } = props;
+  const data = await getItem({ id });
 
-  const init = async () => {
-    const { id } = params;
-    const data = await getItem({ id });
-
-    setEventPost(data);
-  };
-
-  useEffect(() => {
-    init();
-  }, []);
-
-  if (!eventPost) return "Loading...";
-
-  const { _id, title, content, start_date } = eventPost;
+  const { _id, title, content, start_date } = data;
 
   return (
     <div>

@@ -1,10 +1,12 @@
 import { client } from "@/utils/database";
 import { ObjectId } from "mongodb";
+import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url);
+
     const id = searchParams.get("id");
     const keyword = searchParams.get("keyword");
 
@@ -13,7 +15,21 @@ export const GET = async (request: NextRequest) => {
 
     if (keyword) {
       const data = await collection
-        .find({ title: { $in: [keyword] } })
+        .aggregate([
+          {
+            $search: {
+              // $search -> where
+              index: "default", // index는 atlas search에 설정한 index 중 어떤 index를 쓸지.(기본은 default)
+              text: {
+                query: "테스트",
+                path: {
+                  // path가 collection에서 어떤 field를 바라볼지.
+                  wildcard: "*",
+                },
+              },
+            },
+          },
+        ])
         .toArray();
 
       return NextResponse.json(

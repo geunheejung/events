@@ -4,7 +4,7 @@ import _debounce from "lodash/debounce";
 import { useCallback, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { getItemByKeyword } from "@/services/api";
-import { Board } from "@/app/page";
+import Board from "@/components/Board";
 
 const SearchForm = ({ onSubmit }: { onSubmit: (keyword: string) => void }) => {
   const [keyword, setKeyword] = useState("");

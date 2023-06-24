@@ -7,17 +7,14 @@ export const getList = async () => {
     headers: {
       "Content-Type": "application/json",
     },
+    cache: "no-cache",
   });
-
-  revalidatePath("/");
 
   if (!res.ok) {
     throw new Error("Failed to fetch data list");
   }
 
   const data = (await res.json()) as IEventResponse;
-
-  console.log("data ->", data);
 
   return data;
 };
