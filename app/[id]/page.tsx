@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getItem } from "@/services/api";
+import { getItem } from "@/services/api/post";
 
 export default async (props: { params: { id: string } }) => {
   const {

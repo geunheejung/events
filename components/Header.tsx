@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "@/public/next.svg";
@@ -6,8 +8,11 @@ import {
   AiFillRedditCircle,
   AiOutlineSearch,
 } from "react-icons/ai";
+import { useState } from "react";
 
 const Header = () => {
+  const [isLogin, setIsLogin] = useState(false);
+
   return (
     <header className="header-wrapper">
       <div>
@@ -25,7 +30,11 @@ const Header = () => {
           </Link>
         </div>
         <div className="write-btn">
-          <Link href="/write">새 글 작성</Link>
+          {isLogin ? (
+            <Link href="/write">새 글 작성</Link>
+          ) : (
+            <Link href="/member/login">로그인</Link>
+          )}
         </div>
         <div>
           <AiFillRedditCircle style={{ width: 40, height: 40 }} />

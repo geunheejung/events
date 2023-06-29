@@ -1,4 +1,4 @@
-import { getList } from "@/services/api";
+import { getList } from "@/services/api/post";
 import Board from "@/components/Board";
 import "@/styles/post.scss";
 

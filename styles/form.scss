@@ -12,6 +12,12 @@
     border: 1px solid #eee;
     border-radius: 4px;
   }
+
+  .message {
+    margin: 4px 0 0 0;
+    font-size: 10px;
+    color: coral;
+  }
 }
 
 .btn {
@@ -19,6 +25,11 @@
   color: #fff;
   border-radius: 4px;
   padding: 6px 16px;
+  transition: 0.5s;
+
+  &:disabled {
+    background-color: #bbb;
+  }
 }
 
 .sign-form-container {

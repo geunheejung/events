@@ -3,7 +3,7 @@
 import _debounce from "lodash/debounce";
 import { useCallback, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import { getItemByKeyword } from "@/services/api";
+import { getItemByKeyword } from "@/services/api/post";
 import Board from "@/components/Board";
 
 const SearchForm = ({ onSubmit }: { onSubmit: (keyword: string) => void }) => {

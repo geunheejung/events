@@ -18,5 +18,15 @@ declare global {
 
   interface IEventResponse extends IResponse<IEvent[]> {}
 
-  type IEventPayload = Pick<IEvent, "title" | "content" | "_id">;
+  type EventPayloadType = Pick<IEvent, "title" | "content" | "_id">;
+
+  interface ISignUpPayload {
+    email: string;
+    password: string;
+    username: string;
+  }
+
+  interface ICheckDuplicateNamePayload {
+    name: string;
+  }
 }

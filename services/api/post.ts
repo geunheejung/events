@@ -1,6 +1,4 @@
-import { revalidatePath } from "next/cache";
-
-const url = `http://localhost:3000/api`;
+const url = `http://localhost:3000/api/post`;
 
 export const getList = async () => {
   const res = await fetch(url, {
@@ -50,7 +48,7 @@ export const getItemByKeyword = async (payload: { keyword: string }) => {
   return data as IEvent[];
 };
 
-export const setItem = async (payload: IEventPayload) => {
+export const setItem = async (payload: EventPayloadType) => {
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -64,7 +62,7 @@ export const setItem = async (payload: IEventPayload) => {
   return res;
 };
 
-export const updateItem = async (payload: IEventPayload) => {
+export const updateItem = async (payload: EventPayloadType) => {
   const res = await fetch(url, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

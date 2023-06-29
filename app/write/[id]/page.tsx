@@ -1,7 +1,7 @@
 "use client";
 
 import WriteForm from "@/components/WriteForm";
-import { getItem, setItem, updateItem } from "@/services/api";
+import { getItem, setItem, updateItem } from "@/services/api/post";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
@@ -14,7 +14,7 @@ export default () => {
   const [content, setContent] = useState("");
 
   const handleSubmit = useCallback(
-    ({ title, content }: IEventPayload) => {
+    ({ title, content }: EventPayloadType) => {
       updateItem({ title, content, _id: id });
     },
     [title, content]

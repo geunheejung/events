@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 interface IProps {
   title?: string;
   content?: string;
-  onSubmit: (payload: IEventPayload) => void;
+  onSubmit: (payload: EventPayloadType) => void;
 }
 
 const WriteForm = (props: IProps) => {

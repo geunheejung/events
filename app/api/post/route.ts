@@ -1,7 +1,11 @@
+import { Post } from "@/services/model";
 import { client } from "@/utils/database";
 import { ObjectId } from "mongodb";
-import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
+
+export const response = <T>(message: string, data: T, ok: boolean) => {
+  return NextResponse.json({ message, data, ok }, { status: ok ? 200 : 400 });
+};
 
 export const GET = async (request: NextRequest) => {
   try {
@@ -32,30 +36,20 @@ export const GET = async (request: NextRequest) => {
         ])
         .toArray();
 
-      return NextResponse.json(
-        { message: "success", data, ok: true },
-        { status: 200 }
-      );
+      return response("success", data, true);
     }
 
     const data = id
       ? ((await collection.findOne({ _id: new ObjectId(id) })) as IEvent)
       : ((await collection.find({}).toArray()) as IEvent[]);
 
-    return NextResponse.json(
-      { message: "success", data, ok: true },
-      { status: 200 }
-    );
+    return response("success", data, true);
   } catch (error: any) {
     console.log("error =>", error);
-    return NextResponse.json(
-      { message: error.message, data: {}, ok: false },
-      { status: 400 }
-    );
+
+    return response("Failed Get", { message: error.message }, false);
   }
 };
-
-// GET으로 하되, keyword를 보내자.
 
 export const POST = async (request: NextRequest) => {
   try {
@@ -74,16 +68,9 @@ export const POST = async (request: NextRequest) => {
       .collection("events")
       .findOne({ _id: res.insertedId });
 
-    return NextResponse.json({
-      message: "Success Write",
-      data: insertedItem,
-      ok: true,
-    });
+    return response("Success Write", insertedItem, true);
   } catch (error: any) {
-    return NextResponse.json(
-      { message: "Fail Write", data: { message: error.message }, ok: false },
-      { status: 400 }
-    );
+    return response("Failed Write", { message: error.message }, false);
   }
 };
 
@@ -93,36 +80,26 @@ export const PUT = async (request: NextRequest) => {
 
     const { _id: id } = payload;
 
-    const db = client.db("reservation");
-    const data = {
-      title: payload.title,
-      content: payload.content,
-      start_date: new Date(),
-      end_date: new Date(),
-      reg_date: new Date(),
-    };
-
     if (!id) {
       throw new Error("Required Id");
     }
 
+    const db = client.db("reservation");
+
+    const data = new Post({
+      _id: id,
+      title: payload.title,
+      content: payload.content,
+    });
+
     const res = await db
       .collection("events")
-      .updateOne({ _id: new ObjectId(id) }, { $set: data });
+      .updateOne({ _id: data.id }, { $set: data });
 
-    const updatedItem = await db
-      .collection("events")
-      .findOne({ _id: new ObjectId(id) });
+    const updatedItem = await db.collection("events").findOne({ _id: data.id });
 
-    return NextResponse.json({
-      message: "Success Update",
-      data: updatedItem,
-      ok: true,
-    });
-  } catch (error) {
-    return NextResponse.json(
-      { message: "Fail Write", data: {}, ok: false },
-      { status: 400 }
-    );
+    return response("Success Update", updatedItem, true);
+  } catch (error: any) {
+    return response("Failed Update", { message: error.message }, true);
   }
 };
