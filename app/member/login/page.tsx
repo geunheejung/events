@@ -37,7 +37,6 @@ const Login = () => {
   const handleEmail = (value: string) => {
     setEmail(value);
     updateErrorMsgTo("email")("");
-    debugger;
   };
 
   const handlePassword = (value: string) => {
@@ -48,7 +47,6 @@ const Login = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    debugger;
     const isValidated = validate();
 
     if (!isValidated) return;

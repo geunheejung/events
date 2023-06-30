@@ -1,11 +1,11 @@
 "use client";
 
+import { useMemo } from "react";
 import Btn from "@/components/Btn";
 import TextField from "@/components/TextField";
-import { validateEmail } from "@/utils/validate";
-import { checkDuplicateName } from "@/services/api/member";
+import { validateEmail, validatePassword } from "@/utils/validate";
+import { checkDuplicateName, signUp } from "@/services/api/member";
 import useForm from "@/hooks/useForm";
-import { useMemo } from "react";
 
 const SignUp = () => {
   const formKey = {
@@ -24,6 +24,17 @@ const SignUp = () => {
   } = formState;
 
   const isDisabled = useMemo(() => name.isValidated || !name.value, [name]);
+
+  const fetchSignUp = async () => {
+    const payload: ISignUpPayload = {
+      email: email.value,
+      password: password.value,
+      username: name.value,
+    };
+
+    debugger;
+    const res = await signUp(payload);
+  };
 
   const validateName = async () => {
     const updater = updateStateTo(formKey.name);
@@ -51,7 +62,7 @@ const SignUp = () => {
     let isValid = true;
 
     const isEmailValid = validateEmail(email.value);
-    const isPasswordValid = validateEmail(password.value);
+    const isPasswordValid = validatePassword(password.value);
     const isRePasswordValid = password.value === rePassword.value;
 
     if (!isEmailValid) {
@@ -100,10 +111,13 @@ const SignUp = () => {
     validateName();
   };
 
-  const handleSignUp = () => {
-    const isValid = validate();
+  const handleSignUp = async () => {
+    const isValid = await validate();
 
     if (!isValid) return;
+
+    // 모든 양식이 유효하면 회원가입 진행해야함.
+    fetchSignUp();
   };
 
   return (

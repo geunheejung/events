@@ -1,12 +1,7 @@
-const url = `http://localhost:3000/api/post`;
+import fetchApi from "@/services/fetchApi";
 
 export const getList = async () => {
-  const res = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    cache: "no-cache",
-  });
+  const res = await fetchApi("/post", { headers: { cache: "no-cache" } });
 
   if (!res.ok) {
     throw new Error("Failed to fetch data list");
@@ -18,11 +13,7 @@ export const getList = async () => {
 };
 
 export const getItem = async (payload: { id: string }) => {
-  const res = await fetch(`${url}?id=${payload.id}`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const res = await fetchApi(`/post?id=${payload.id}`);
 
   if (!res.ok) {
     throw new Error("Failed to fetch data item");
@@ -33,11 +24,7 @@ export const getItem = async (payload: { id: string }) => {
   return data as IEvent;
 };
 export const getItemByKeyword = async (payload: { keyword: string }) => {
-  const res = await fetch(`${url}?keyword=${payload.keyword}`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const res = await fetchApi(`/post?keyword=${payload.keyword}`);
 
   if (!res.ok) {
     throw new Error("Failed to fetch search item");
@@ -49,11 +36,7 @@ export const getItemByKeyword = async (payload: { keyword: string }) => {
 };
 
 export const setItem = async (payload: EventPayloadType) => {
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  const res = await fetchApi("/post", { method: "POST", payload });
 
   if (!res.ok) {
     throw new Error("Failed to fetch set data");
@@ -63,11 +46,7 @@ export const setItem = async (payload: EventPayloadType) => {
 };
 
 export const updateItem = async (payload: EventPayloadType) => {
-  const res = await fetch(url, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  const res = await fetchApi("/post", { method: "PUT", payload });
 
   if (!res.ok) {
     throw new Error("Failed to fetch update data");

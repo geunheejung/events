@@ -1,5 +1,16 @@
 import { ObjectId } from "mongodb";
 
+export class Member {
+  email: string;
+  password: string;
+  username: string;
+  constructor({ email, password, username }: ISignUpPayload) {
+    this.email = email;
+    this.password = password;
+    this.username = username;
+  }
+}
+
 export class Post {
   id: ObjectId;
   title: string;
@@ -17,3 +28,5 @@ export class Post {
     this.end_date = new Date();
   }
 }
+
+export const url = `http://localhost:3000/api/member`;

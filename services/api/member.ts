@@ -1,25 +1,22 @@
-const url = `http://localhost:3000/api/member`;
+import fetchApi from "../fetchApi";
 
-export const signup = async (payload: ISignUpPayload) => {
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+export const signUp = async (payload: ISignUpPayload) => {
+  const res = await fetchApi("/member", { method: "POST", payload });
 
   if (!res.ok) {
     throw new Error("Failed to fetch set data");
   }
 
-  return res;
+  const data = await res.json();
+
+  return data;
 };
 
 export const checkDuplicateName = async (
   payload: ICheckDuplicateNamePayload
 ) => {
-  const res = await fetch(`${url}?name=${payload.name}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
+  const res = await fetchApi(`/member?name=${payload.name}`, {
+    headers: { cache: "no-cache" },
   });
 
   if (!res.ok) {
