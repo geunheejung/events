@@ -5,13 +5,17 @@ interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Btn = ({ label, type, style, disabled, onClick }: IProps) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    onClick && onClick(e);
+  };
   return (
     <button
       type={type}
       className="btn"
       style={style}
       disabled={disabled}
-      onClick={onClick}
+      onClick={handleClick}
     >
       {label}
     </button>

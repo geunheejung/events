@@ -1,21 +1,11 @@
 "use client";
 
-import { useState } from "react";
-
 import Btn from "@/components/Btn";
 import TextField from "@/components/TextField";
-import { validateEmail, validateName } from "@/utils/validate";
+import { validateEmail } from "@/utils/validate";
 import { checkDuplicateName } from "@/services/api/member";
-
-interface IFormState {
-  value: string;
-  message: string;
-  isValidated: boolean;
-}
-
-type FormStateType = {
-  [key: string]: IFormState;
-};
+import useForm from "@/hooks/useForm";
+import { useMemo } from "react";
 
 const SignUp = () => {
   const formKey = {
@@ -24,28 +14,73 @@ const SignUp = () => {
     rePassword: "rePassword",
     name: "name",
   } as const;
+  const [formState, setFormState, updateStateTo] = useForm(formKey);
 
-  const [formState, setFormState] = useState(
-    Object.keys(formKey).reduce<FormStateType>((prev, curr) => {
-      return {
-        ...prev,
-        [curr]: {
-          value: "",
-          message: "",
-          isValidated: true,
-        },
-      };
-    }, {})
-  );
+  const {
+    [formKey.email]: email,
+    [formKey.password]: password,
+    [formKey.rePassword]: rePassword,
+    [formKey.name]: name,
+  } = formState;
 
-  const updateStateTo = (key: string) => (newState: Partial<IFormState>) => {
-    setFormState((prev) => ({
-      ...prev,
-      [key]: {
-        ...prev[key],
-        ...newState,
-      },
-    }));
+  const isDisabled = useMemo(() => name.isValidated || !name.value, [name]);
+
+  const validateName = async () => {
+    const updater = updateStateTo(formKey.name);
+
+    if (name.value.length < 2) {
+      updater({ message: "이름 양식에 맞지 않습니다." });
+      return false;
+    }
+
+    const isDuplicated = await checkDuplicateName({
+      name: formState[formKey.name].value,
+    });
+
+    if (isDuplicated) {
+      updater({ message: "이미 존재하는 이름 입니다." });
+      return false;
+    }
+
+    updater({ message: "", isValidated: true });
+
+    return true;
+  };
+
+  const validate = async () => {
+    let isValid = true;
+
+    const isEmailValid = validateEmail(email.value);
+    const isPasswordValid = validateEmail(password.value);
+    const isRePasswordValid = password.value === rePassword.value;
+
+    if (!isEmailValid) {
+      updateStateTo(formKey.email)({
+        message: "이메일 양식이 틀렸습니다",
+      });
+
+      isValid = false;
+    }
+    if (!isPasswordValid) {
+      updateStateTo(formKey.password)({
+        message: "비밀번호 양식이 틀렸습니다",
+      });
+
+      isValid = false;
+    }
+
+    if (!isRePasswordValid) {
+      updateStateTo(formKey.rePassword)({
+        message: "비밀번호가 다릅니다",
+      });
+
+      isValid = false;
+    }
+
+    const isValidName = await validateName();
+    if (!isValidName) isValid = false;
+
+    return isValid;
   };
 
   const handleInput = (
@@ -55,51 +90,30 @@ const SignUp = () => {
     const {
       target: { id },
     } = e;
-
-    updateStateTo(id)({ value, message: "", isValidated: true });
+    updateStateTo(id)({ value, message: "", isValidated: false });
   };
 
-  const handleDuplicateCheck = async (
+  const handleDuplicateCheck = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
-
-    const isDuplicated = await checkDuplicateName({
-      name: formState[formKey.name].value,
-    });
-
-    if (isDuplicated) {
-      updateStateTo(formKey.name)({
-        isValidated: false,
-        message: "이미 존재하는 이름 입니다.",
-      });
-    }
+    validateName();
   };
 
-  const validate = () => {
-    const {
-      [formKey.email]: email,
-      [formKey.password]: password,
-      [formKey.rePassword]: rePassword,
-      [formKey.name]: name,
-    } = formState;
+  const handleSignUp = () => {
+    const isValid = validate();
 
-    const isEmailValid = validateEmail(email.value);
-    const isPasswordValid = validateEmail(password.value);
-    const isRePasswordValid = password.value === rePassword.value;
+    if (!isValid) return;
   };
 
   return (
     <form>
-      {/* email - email 인증 */}
-      {/* password */}
-      {/* password 재입력 */}
-      {/* username */}
       <TextField
         label="Email Address"
         type="text"
         htmlFor={formKey.email}
         placeholder="이메일를 입력해주세요"
+        message={email.message}
         onChange={handleInput}
       />
       <TextField
@@ -107,6 +121,7 @@ const SignUp = () => {
         type="password"
         htmlFor={formKey.password}
         placeholder="비밀번호를 입력해주세요"
+        message={password.message}
         onChange={handleInput}
       />
       <TextField
@@ -114,6 +129,7 @@ const SignUp = () => {
         type="password"
         htmlFor={formKey.rePassword}
         placeholder="한번 더 입력해주세요"
+        message={rePassword.message}
         onChange={handleInput}
       />
       <div
@@ -129,18 +145,18 @@ const SignUp = () => {
           type="text"
           htmlFor={formKey.name}
           placeholder="이름을 입력해주세요"
-          message={formState[formKey.name].message}
+          message={name.message}
           onChange={handleInput}
         />
         <Btn
           label="중복확인"
           style={{ height: 56 }}
-          disabled={!formState[formKey.name].value}
+          disabled={isDisabled}
           onClick={handleDuplicateCheck}
         />
       </div>
 
-      <Btn label="로그인" />
+      <Btn label="회원가입" onClick={handleSignUp} />
     </form>
   );
 };

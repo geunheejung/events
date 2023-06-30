@@ -12,11 +12,3 @@ export const validatePassword = (password: string) => {
 
   return isValid;
 };
-
-export const validateName = (name: string) => {
-  let isValid = true;
-
-  if (name.length < 2) isValid = false;
-
-  return isValid;
-};
