@@ -10,6 +10,7 @@ const nextConfig = {
   // 이러면 webpack 설정을 override 가능한 듯.
   webpack(config) {
     config.experiments = { ...config.experiments, topLevelAwait: true };
+    config.resolve.fallback = { fs: false };
     return config;
   },
   sassOptions: {

@@ -1,11 +1,27 @@
-const Homepage = () => {
+import path from "path";
+import fs from "fs/promises";
+
+const Homepage = ({ products }) => {
   return (
     <ul>
-      <li>Product 1</li>
-      <li>Product 2</li>
-      <li>Product 3</li>
+      {products &&
+        products.map((row) => {
+          return <li key={row.id}>{row.title}</li>;
+        })}
     </ul>
   );
+};
+
+export const getStaticProps = async () => {
+  const filePath = path.join(process.cwd(), "data", "dummy-backend.json");
+  const jsonData = await fs.readFile(filePath);
+  const data = JSON.parse(jsonData);
+
+  return {
+    props: {
+      products: data.products,
+    },
+  };
 };
 
 export default Homepage;
