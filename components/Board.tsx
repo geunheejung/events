@@ -10,7 +10,7 @@ const Board = ({ data }: { data: IEvent[] }) => {
     <div className="post-list-container">
       {data.map((row) => {
         return (
-          <Link href={`/${row._id}`} key={row._id}>
+          <Link href={`/post/${row._id}`} key={row._id}>
             <article key={row._id} className="post-item">
               <section>
                 <div className="header">{row.title}</div>

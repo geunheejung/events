@@ -7,7 +7,7 @@ export const getList = async () => {
     throw new Error("Failed to fetch data list");
   }
 
-  const data = (await res.json()) as IEventResponse;
+  const { data } = (await res.json()) as IEventResponse;
 
   return data;
 };

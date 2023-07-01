@@ -16,7 +16,7 @@ export default async (props: { params: { id: string } }) => {
       <div>
         <span>등록 날짜: {start_date}</span>
       </div>
-      <Link href={`/write/${_id}`}>글수정</Link>
+      <Link href={`/post/write/${_id}`}>글수정</Link>
     </div>
   );
 };

@@ -22,6 +22,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.10.1",
+    "react-query": "^3.39.3",
+    "react-query-devtools": "^2.6.3",
     "react-spinners": "^0.13.8",
     "tailwindcss": "3.3.2",
     "typescript": "5.1.3"
@@ -29,6 +31,7 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/lodash": "^4.14.195",
+    "@types/react-query": "^1.2.9",
     "sass": "^1.63.6",
     "typescript-plugin-css-modules": "^5.0.1"
   }

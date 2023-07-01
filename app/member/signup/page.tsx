@@ -32,7 +32,6 @@ const SignUp = () => {
       username: name.value,
     };
 
-    debugger;
     const res = await signUp(payload);
   };
 

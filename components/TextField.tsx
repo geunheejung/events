@@ -7,7 +7,7 @@ interface IProps {
   type: React.HTMLInputTypeAttribute;
   placeholder?: string;
   message?: string;
-  onChange: (value: string, e: React.ChangeEvent<HTMLIN>) => void;
+  onChange: (value: string, e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const TextField = ({
