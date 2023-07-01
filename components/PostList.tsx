@@ -12,7 +12,7 @@ const PostList = () => {
 
   console.log(isLoading, isFetching, error);
 
-  return <>{data && <Board data={data.data} />}</>;
+  return <>{data && <Board data={data} />}</>;
 };
 
 export default PostList;

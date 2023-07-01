@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 export default () => {
-  const params = useParams();
+  const params = useParams() as { id: string };
 
   const { id } = params;
 
