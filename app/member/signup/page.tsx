@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useRouter } from "next/navigation";
 import Btn from "@/components/Btn";
 import TextField from "@/components/TextField";
 import { validateEmail, validatePassword } from "@/utils/validate";
@@ -14,6 +15,7 @@ const SignUp = () => {
     rePassword: "rePassword",
     name: "name",
   } as const;
+  const router = useRouter();
   const [formState, setFormState, updateStateTo] = useForm(formKey);
 
   const {
@@ -33,6 +35,13 @@ const SignUp = () => {
     };
 
     const res = await signUp(payload);
+
+    if (!res.ok) {
+      // TODO: 회원가입 실패 메시지 띄우기.
+      return;
+    }
+
+    router.replace("/member/login");
   };
 
   const validateName = async () => {

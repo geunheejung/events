@@ -16,6 +16,7 @@
     "@types/react-dom": "18.2.5",
     "autoprefixer": "10.4.14",
     "bcrypt": "^5.1.0",
+    "crypto-js": "^4.1.1",
     "lodash": "^4.17.21",
     "mongodb": "^5.6.0",
     "next": "13.4.6",
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/crypto-js": "^4.1.1",
     "@types/lodash": "^4.14.195",
     "@types/react-query": "^1.2.9",
     "sass": "^1.63.6",

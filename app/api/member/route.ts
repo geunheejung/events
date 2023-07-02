@@ -24,31 +24,3 @@ export const GET = async (request: NextRequest) => {
     return response("Failed Get Member", { message: error.message }, false);
   }
 };
-
-/**
- *
- * @param request
- */
-export const POST = async (request: NextRequest) => {
-  try {
-    const payload = (await request.json()) as ISignUpPayload;
-    const { email, password, username } = payload;
-    const db = client.db("reservation");
-
-    await bcrypt.genSalt(10, function (err, salt) {
-      bcrypt.hash(payload.password, salt, function (err, hash) {
-        payload.password = hash;
-      });
-    });
-
-    const member = new Member(payload);
-
-    const res = await db.collection("members").insertOne(member);
-
-    console.log("payload ->", payload);
-
-    return response("Success SignUp", {}, true);
-  } catch (error: any) {
-    return response("fail SignUp", {}, false);
-  }
-};

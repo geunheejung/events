@@ -1,10 +1,34 @@
+import crypto, { enc } from "crypto-js";
 import fetchApi from "../fetchApi";
+import { encrypt } from "../crypto";
 
 export const signUp = async (payload: ISignUpPayload) => {
-  const res = await fetchApi("/member", { method: "POST", payload });
+  const cipherText = encrypt(payload.password);
+
+  const res = await fetchApi("/member/sign-up", {
+    method: "POST",
+    payload: { ...payload, password: cipherText },
+  });
 
   if (!res.ok) {
-    throw new Error("Failed to fetch set data");
+    throw new Error("Failed to fetch sign up");
+  }
+
+  const data = await res.json();
+
+  return data;
+};
+
+export const signIn = async (payload: ISignInPayload) => {
+  const cipherText = encrypt(payload.password);
+
+  const res = await fetchApi("/member/sign-in", {
+    method: "POST",
+    payload: { ...payload, password: cipherText },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch sign in");
   }
 
   const data = await res.json();

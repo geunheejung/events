@@ -6,6 +6,7 @@ import TextField from "@/components/TextField";
 import Btn from "@/components/Btn";
 import { validateEmail, validatePassword } from "@/utils/validate";
 import "@/styles/form.scss";
+import { signIn } from "@/services/api/member";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,6 +15,10 @@ const Login = () => {
 
   const updateErrorMsgTo = (key: "email" | "password") => (message: string) => {
     setErrorMsg((prev) => ({ ...prev, [key]: message }));
+  };
+
+  const fetchSignIn = async () => {
+    const res = await signIn({ email, password });
   };
 
   const validate = useCallback(() => {
@@ -44,25 +49,16 @@ const Login = () => {
     updateErrorMsgTo("password")("");
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const isValidated = validate();
 
     if (!isValidated) return;
 
-    const payload = {
-      email,
-      password,
-    };
-
-    /**
-     * 회원가입 API 요청.
-     */
+    fetchSignIn();
   };
 
   return (
-    <form className="sign-in-container" onSubmit={handleSubmit}>
+    <form className="sign-in-container">
       <TextField
         label="Email Address"
         type="text"
@@ -72,7 +68,7 @@ const Login = () => {
       />
       <TextField
         label="Password"
-        type="text"
+        type="password"
         htmlFor="password"
         message={errorMsg.password}
         onChange={handlePassword}
@@ -80,7 +76,7 @@ const Login = () => {
       <Link href="/member/signup">
         <p>Sign Up</p>
       </Link>
-      <Btn label="로그인" />
+      <Btn label="로그인" onClick={handleSubmit} />
     </form>
   );
 };

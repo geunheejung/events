@@ -16,6 +16,13 @@ declare global {
     reg_date: string;
   }
 
+  interface IMember {
+    _id: ObjectId;
+    email: string;
+    password: string;
+    username: string;
+  }
+
   interface IEventResponse extends IResponse<IEvent[]> {}
 
   type EventPayloadType = Pick<IEvent, "title" | "content" | "_id">;
@@ -24,6 +31,11 @@ declare global {
     email: string;
     password: string;
     username: string;
+  }
+
+  interface ISignInPayload {
+    email: string;
+    password: string;
   }
 
   interface ICheckDuplicateNamePayload {
