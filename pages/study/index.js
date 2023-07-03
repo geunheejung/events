@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs/promises";
+import Link from "next/link";
 import {
   QueryClient,
   QueryClientProvider,
@@ -18,18 +19,16 @@ const getData = async () => {
 const queryClient = new QueryClient();
 
 const Homepage = ({ products }) => {
-  // const data = useQuery({
-  //   queryKey: ["product-list"],
-  //   queryFn: getData,
-  //   initialData: products,
-  // });
-
   return (
     <QueryClientProvider client={queryClient}>
       <ul>
         {products &&
           products.map((row) => {
-            return <li key={row.id}>{row.title}</li>;
+            return (
+              <li key={row.id}>
+                <Link href={`/study/${row.id}`}>{row.title}</Link>
+              </li>
+            );
           })}
       </ul>
     </QueryClientProvider>

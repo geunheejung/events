@@ -26,12 +26,12 @@ export const POST = async (request: NextRequest) => {
 
     const isMatched = bcrypt.compareSync(originalText, res.password);
 
-    // 그냥 암호화해서 전달하고 key 로 평문화하자
-
     // 2. email은 존재하나, password가 존재하지 않을 경우
     if (!isMatched) throw new Error("비밀번호가 유효하지 않습니다.");
 
     const { password: _, ..._res } = res;
+
+    // token을 생성해줘야함.
 
     return response("로그인에 성공 했습니다.", _res, true);
   } catch (error: any) {
