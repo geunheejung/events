@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query-devtools";
+import { SessionProvider } from "next-auth/react";
 
 // queryclient가 요청당 한 번만 생성되도록 하면서 사용자 및 요청 간에 데이타가 공유되는 것을 방지
 // queryclient의 요청 범위 싱글톤 인스턴스를 생성.

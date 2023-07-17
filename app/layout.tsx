@@ -1,6 +1,6 @@
 import { Inter } from "next/font/google";
 import Provider from "@/utils/provider";
-import Header from "@/components/Header";
+import { SessionProvider } from "next-auth/react";
 import "@/styles/reset.css";
 import "@/styles/globals.css";
 

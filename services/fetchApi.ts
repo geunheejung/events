@@ -23,6 +23,8 @@ const fetchApi = async <T>(
 
   const res = await fetch(URL, fetchConfig);
 
+  // const data = await res.json();
+
   return res;
 };
 

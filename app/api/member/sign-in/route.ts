@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { client } from "@/utils/database";
 import { response } from "@/app/api/post/route";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "@/services/crypto";
 
 /**
@@ -12,7 +13,6 @@ import { decrypt } from "@/services/crypto";
 export const POST = async (request: NextRequest) => {
   try {
     const payload = (await request.json()) as ISignInPayload;
-    console.log(payload);
     const { email, password } = payload;
     const db = client.db("reservation");
     const res = (await db.collection("members").findOne({ email })) as IMember;
@@ -22,19 +22,42 @@ export const POST = async (request: NextRequest) => {
 
     const originalText = decrypt(password);
 
-    console.log("decrypt -->", originalText);
-
     const isMatched = bcrypt.compareSync(originalText, res.password);
 
     // 2. email은 존재하나, password가 존재하지 않을 경우
     if (!isMatched) throw new Error("비밀번호가 유효하지 않습니다.");
 
-    const { password: _, ..._res } = res;
+    const secretKey = process.env.NEXT_PUBLIC_JWT_SECRET_KET || "";
+    const data = { userId: res._id };
+    const accessToken = jwt.sign(data, secretKey, { expiresIn: "24h" });
+    const refreshToken = jwt.sign(data, secretKey, { expiresIn: "48h" });
 
-    // token을 생성해줘야함.
+    db.collection("members").updateOne({ email }, { $set: { refreshToken } });
 
-    return response("로그인에 성공 했습니다.", _res, true);
+    const { password: _, ...user } = res;
+
+    /**
+     * token 발급
+     * access token은 payload 로
+     * refresh token은 cookie 로
+     */
+
+    const _response = response(
+      "로그인에 성공 했습니다.",
+      {
+        refreshToken,
+        accessToken,
+        user,
+        accessTokenExpiry: Date.now() + 60 * 60 * 1000,
+      },
+      true
+    );
+
+    // 여기서 refresh token도 같이 db에 저장해두고, 유효한지 확인해줘야함.
+
+    return _response;
   } catch (error: any) {
+    console.log("[ERROR]", error.message);
     return response(error.message || "로그인에 실패 했습니다.", null, false);
   }
 };

@@ -10,8 +10,6 @@ const PostList = () => {
     queryFn: () => getList(),
   });
 
-  console.log(isLoading, isFetching, error);
-
   return <>{data && <Board data={data} />}</>;
 };
 

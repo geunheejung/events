@@ -44,8 +44,6 @@ const Search = () => {
   const handleSubmit = async (keyword: string) => {
     const res = await getItemByKeyword({ keyword });
 
-    console.log("res ->", res);
-
     setResult(res);
   };
   return (

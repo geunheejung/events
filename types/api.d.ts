@@ -1,12 +1,12 @@
 export {};
 
-interface IResponse<T> {
-  status: number;
-  message: string;
-  data: T;
-}
-
 declare global {
+  interface IResponse<T> {
+    status: number;
+    message: string;
+    data: T;
+  }
+
   interface IEvent {
     _id: ObjectId;
     title: string;
@@ -21,6 +21,7 @@ declare global {
     email: string;
     password: string;
     username: string;
+    refreshToken: string;
   }
 
   interface IEventResponse extends IResponse<IEvent[]> {}
@@ -36,6 +37,13 @@ declare global {
   interface ISignInPayload {
     email: string;
     password: string;
+  }
+
+  interface ISignInResponse {
+    accessToken: string;
+    refreshToken: string;
+    accessTokenExpiry: number;
+    user: Omit<IMember, "_id">;
   }
 
   interface ICheckDuplicateNamePayload {

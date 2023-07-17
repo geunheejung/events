@@ -1,6 +1,7 @@
 import crypto, { enc } from "crypto-js";
 import fetchApi from "../fetchApi";
 import { encrypt } from "../crypto";
+import { JWT } from "next-auth/jwt";
 
 export const signUp = async (payload: ISignUpPayload) => {
   const cipherText = encrypt(payload.password);
@@ -22,7 +23,7 @@ export const signUp = async (payload: ISignUpPayload) => {
 export const signIn = async (payload: ISignInPayload) => {
   const cipherText = encrypt(payload.password);
 
-  const res = await fetchApi("/member/sign-in", {
+  const res = await fetchApi("/api/member/sign-in", {
     method: "POST",
     payload: { ...payload, password: cipherText },
   });
@@ -31,9 +32,28 @@ export const signIn = async (payload: ISignInPayload) => {
     throw new Error("Failed to fetch sign in");
   }
 
-  const data = await res.json();
+  // 여기 data에는 token도 같이 담겨져서 내려와야함.
+  const data = (await res.json()) as IResponse<ISignInResponse>;
 
   return data;
+};
+
+export const refreshAccessToken = async (token: JWT) => {
+  try {
+    const res = await fetchApi("/api/member/refresh-token", {
+      method: "POST",
+      payload: { token },
+    });
+
+    console.log("res ->", res);
+
+    return token;
+  } catch (error: any) {
+    return {
+      ...token,
+      error: "RefreshAccessTokenError",
+    };
+  }
 };
 
 export const checkDuplicateName = async (
@@ -50,4 +70,8 @@ export const checkDuplicateName = async (
   const { data } = await res.json();
 
   return data as boolean;
+};
+
+export const getUser = async () => {
+  return { name: "tom" };
 };

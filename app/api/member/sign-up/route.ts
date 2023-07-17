@@ -15,8 +15,6 @@ export const POST = async (request: NextRequest) => {
 
     const originalText = decrypt(payload.password);
 
-    console.log("originalText -->", originalText);
-
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(originalText, salt);
     const member = new Member({
